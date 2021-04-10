@@ -19,15 +19,12 @@ abstract  class SerializablePlayerInventory (
     val armour: Array<SerializableArmourPiece>,
     val offHand: SerializableItemStack,
     val xp: Int,
-    private val playerUUID: String
 ) : SerializableInventory<PlayerInventory>(itemList.toList()) {
 
-    @Transient
-    val playerId: UUID = UUID.fromString(playerUUID)
-
     abstract val player: PlayerEntity
+    val uuid: String = player.uuidAsString
 
-    fun toInventory(player: PlayerEntity): PlayerInventory {
+    override fun toInventory(): PlayerInventory {
         val inventory = PlayerInventory(player)
         items.map { it.toItemStack() }.forEachIndexed { index, itemStack ->
             inventory.main.set(index, itemStack)
