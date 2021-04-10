@@ -7,6 +7,6 @@ import net.minecraft.item.ItemStack
 import uk.cmdrnorthpaw.kinventory.model.SerializableItemStack.Companion.serializable
 
 @Serializable
-abstract class SerializableInventory<T: Inventory>(val items: MutableList<SerializableItemStack>) {
+abstract class SerializableInventory<T: Inventory>(val items: List<SerializableItemStack>) {
     abstract fun toInventory(): T
 }

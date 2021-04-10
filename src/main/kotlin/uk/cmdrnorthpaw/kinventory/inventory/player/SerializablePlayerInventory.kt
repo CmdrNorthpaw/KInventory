@@ -1,20 +1,32 @@
-package uk.cmdrnorthpaw.kinventory.model
+package uk.cmdrnorthpaw.kinventory.inventory.player
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.ArmorItem
 import net.minecraft.item.ItemStack
 import net.minecraft.util.registry.Registry
+import uk.cmdrnorthpaw.kinventory.model.SerializableArmourPiece
+import uk.cmdrnorthpaw.kinventory.model.SerializableInventory
+import uk.cmdrnorthpaw.kinventory.model.SerializableItemStack
 import uk.cmdrnorthpaw.kinventory.model.SerializableItemStack.Companion.serializable
+import java.util.*
 
 @Serializable
-class SerializablePlayerInventory (
-    val items: Array<SerializableItemStack>,
+abstract  class SerializablePlayerInventory (
+    private val itemList: Array<SerializableItemStack>,
     val armour: Array<SerializableArmourPiece>,
     val offHand: SerializableItemStack,
-    val xp: Int
-) {
+    val xp: Int,
+    private val playerUUID: String
+) : SerializableInventory<PlayerInventory>(itemList.toList()) {
+
+    @Transient
+    val playerId: UUID = UUID.fromString(playerUUID)
+
+    abstract val player: PlayerEntity
+
     fun toInventory(player: PlayerEntity): PlayerInventory {
         val inventory = PlayerInventory(player)
         items.map { it.toItemStack() }.forEachIndexed { index, itemStack ->

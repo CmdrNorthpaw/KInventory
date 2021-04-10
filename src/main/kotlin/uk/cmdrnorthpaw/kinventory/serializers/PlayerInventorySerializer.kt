@@ -9,7 +9,7 @@ import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.ArmorItem
 import net.minecraft.item.ItemStack
 import net.minecraft.util.registry.Registry
-import uk.cmdrnorthpaw.kinventory.model.SerializablePlayerInventory
+import uk.cmdrnorthpaw.kinventory.inventory.player.SerializablePlayerInventory
 import uk.cmdrnorthpaw.kinventory.KInventory
 import uk.cmdrnorthpaw.kinventory.model.SerializableArmourPiece
 import uk.cmdrnorthpaw.kinventory.model.SerializableItemStack
