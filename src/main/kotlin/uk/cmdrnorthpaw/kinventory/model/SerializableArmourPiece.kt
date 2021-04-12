@@ -4,6 +4,10 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import net.minecraft.entity.EquipmentSlot
 
+/**
+ * Represents a [SerializableItemStack] which is an armour piece.
+ * Contains additional information about the armor piece's [EquipmentSlot] (i.e. whether it's a helmet, chestplate, leggings or boots)
+ * */
 @Serializable
 class SerializableArmourPiece(
     private val armourItem: String,
