@@ -10,6 +10,11 @@ import net.minecraft.util.registry.Registry
 import uk.cmdrnorthpaw.kinventory.inventory.SerializablePlayerInventory
 import uk.cmdrnorthpaw.kinventory.inventory.SerializablePlayerInventory.Companion.serializable
 
+/**
+ * A convenience object that adds a serializer for [PlayerInventory].
+ * Uses surrogate serialization and is basically identical to [SerializablePlayerInventory]
+ * You can either invoke it directly or use the [serializer] extension function for PlayerInventory
+ * */
 object PlayerInventorySerializer : KSerializer<PlayerInventory> {
     override fun deserialize(decoder: Decoder): PlayerInventory {
         return decoder.decodeSerializableValue(SerializablePlayerInventory.serializer()).toInventory()
