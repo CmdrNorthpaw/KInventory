@@ -2,7 +2,7 @@ package uk.cmdrnorthpaw.kinventory
 
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
-import uk.cmdrnorthpaw.kinventory.inventory.player.SerializableServerPlayerInventory
+import uk.cmdrnorthpaw.kinventory.inventory.SerializablePlayerInventory.SerializableServerPlayerInventory
 
 object KInventory : ModInitializer {
     override fun onInitialize() {

@@ -1,11 +1,16 @@
-package uk.cmdrnorthpaw.kinventory.inventory.player
+package uk.cmdrnorthpaw.kinventory.inventory
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import net.fabricmc.api.EnvType
+import net.fabricmc.api.Environment
+import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.ArmorItem
 import net.minecraft.item.ItemStack
+import net.minecraft.server.MinecraftServer
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.registry.Registry
 import uk.cmdrnorthpaw.kinventory.model.SerializableArmourPiece
 import uk.cmdrnorthpaw.kinventory.model.SerializableInventory
@@ -14,7 +19,7 @@ import uk.cmdrnorthpaw.kinventory.model.SerializableItemStack.Companion.serializ
 import java.util.*
 
 @Serializable
-abstract  class SerializablePlayerInventory (
+sealed class SerializablePlayerInventory (
     private val itemList: Array<SerializableItemStack>,
     val armour: Array<SerializableArmourPiece>,
     val offHand: SerializableItemStack,
@@ -70,5 +75,36 @@ abstract  class SerializablePlayerInventory (
         fun PlayerEntity.restoreInventory(inventory: SerializablePlayerInventory) = inventory.restoreInventory(this)
 
         private fun getKey(item: ItemStack) = Registry.ITEM.getId(item.item).toString()
+    }
+
+    @Serializable
+    @Environment(EnvType.CLIENT)
+    class SerializableClientPlayerInventory(
+        private val itemArray: Array<SerializableItemStack>,
+        val armourList: Array<SerializableArmourPiece>,
+        val offHandStack: SerializableItemStack,
+        val playerXp: Int,
+        val uuid: String
+    ) : SerializablePlayerInventory(itemArray, armourList, offHandStack, playerXp, uuid) {
+        @Transient
+        override val player = MinecraftClient.getInstance().player
+    }
+
+    @Environment(EnvType.SERVER)
+    @Serializable
+    class SerializableServerPlayerInventory(
+        private val itemArray: Array<SerializableItemStack>,
+        val armourList: Array<SerializableArmourPiece>,
+        val offHandStack: SerializableItemStack,
+        val playerXp: Int,
+        val uuid: String
+    ) : SerializablePlayerInventory(itemArray, armourList, offHandStack, playerXp, uuid) {
+        override val player: ServerPlayerEntity?
+            get() = server?.playerManager?.getPlayer(UUID.fromString(this.uuid))
+
+        companion object {
+            private var server: MinecraftServer? = null
+            internal fun onStart(server: MinecraftServer) { Companion.server = server }
+        }
     }
 }

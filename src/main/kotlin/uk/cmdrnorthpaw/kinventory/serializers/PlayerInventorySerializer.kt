@@ -4,17 +4,11 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.item.ArmorItem
 import net.minecraft.item.ItemStack
 import net.minecraft.util.registry.Registry
-import uk.cmdrnorthpaw.kinventory.inventory.player.SerializablePlayerInventory
-import uk.cmdrnorthpaw.kinventory.KInventory
-import uk.cmdrnorthpaw.kinventory.inventory.player.SerializablePlayerInventory.Companion.serializable
-import uk.cmdrnorthpaw.kinventory.model.SerializableArmourPiece
-import uk.cmdrnorthpaw.kinventory.model.SerializableItemStack
-import uk.cmdrnorthpaw.kinventory.model.SerializableItemStack.Companion.serializable
+import uk.cmdrnorthpaw.kinventory.inventory.SerializablePlayerInventory
+import uk.cmdrnorthpaw.kinventory.inventory.SerializablePlayerInventory.Companion.serializable
 
 object PlayerInventorySerializer : KSerializer<PlayerInventory> {
     override fun deserialize(decoder: Decoder): PlayerInventory {
