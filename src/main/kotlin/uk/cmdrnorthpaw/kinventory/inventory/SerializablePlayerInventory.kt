@@ -20,8 +20,8 @@ import java.util.*
 
 @Serializable
 sealed class SerializablePlayerInventory (
-    private val itemList: Array<SerializableItemStack>,
-    val armour: Array<SerializableArmourPiece>,
+    private val itemList: List<SerializableItemStack>,
+    val armour: List<SerializableArmourPiece>,
     val offHand: SerializableItemStack,
     val xp: Int,
     val playerId: String
@@ -68,8 +68,8 @@ sealed class SerializablePlayerInventory (
                 armour.add(SerializableArmourPiece(getKey(it), it.tag.toString(), armourPiece.slotType))
             }
 
-            if (this.player.world.isClient) return SerializableClientPlayerInventory(items.toTypedArray(), armour.toTypedArray(), this.offHand[0].serializable(), this.player.totalExperience, this.player.uuidAsString)
-            else return SerializableServerPlayerInventory(items.toTypedArray(), armour.toTypedArray(), this.offHand[0].serializable(), this.player.totalExperience, this.player.uuidAsString)
+            if (this.player.world.isClient) return SerializableClientPlayerInventory(items, armour, this.offHand[0].serializable(), this.player.totalExperience, this.player.uuidAsString)
+            else return SerializableServerPlayerInventory(items, armour, this.offHand[0].serializable(), this.player.totalExperience, this.player.uuidAsString)
         }
 
         fun PlayerEntity.restoreInventory(inventory: SerializablePlayerInventory) = inventory.restoreInventory(this)
@@ -80,8 +80,8 @@ sealed class SerializablePlayerInventory (
     @Serializable
     @Environment(EnvType.CLIENT)
     class SerializableClientPlayerInventory(
-        private val itemArray: Array<SerializableItemStack>,
-        val armourList: Array<SerializableArmourPiece>,
+        private val itemArray: List<SerializableItemStack>,
+        val armourList: List<SerializableArmourPiece>,
         val offHandStack: SerializableItemStack,
         val playerXp: Int,
         val uuid: String
@@ -93,8 +93,8 @@ sealed class SerializablePlayerInventory (
     @Environment(EnvType.SERVER)
     @Serializable
     class SerializableServerPlayerInventory(
-        private val itemArray: Array<SerializableItemStack>,
-        val armourList: Array<SerializableArmourPiece>,
+        private val itemArray: List<SerializableItemStack>,
+        val armourList: List<SerializableArmourPiece>,
         val offHandStack: SerializableItemStack,
         val playerXp: Int,
         val uuid: String
