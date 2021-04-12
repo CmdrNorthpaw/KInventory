@@ -11,37 +11,23 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.registry.Registry
 import uk.cmdrnorthpaw.kinventory.inventory.player.SerializablePlayerInventory
 import uk.cmdrnorthpaw.kinventory.KInventory
+import uk.cmdrnorthpaw.kinventory.inventory.player.SerializablePlayerInventory.Companion.serializable
 import uk.cmdrnorthpaw.kinventory.model.SerializableArmourPiece
 import uk.cmdrnorthpaw.kinventory.model.SerializableItemStack
 import uk.cmdrnorthpaw.kinventory.model.SerializableItemStack.Companion.serializable
 
-class PlayerInventorySerializer(private val player: PlayerEntity) : KSerializer<PlayerInventory> {
+object PlayerInventorySerializer : KSerializer<PlayerInventory> {
     override fun deserialize(decoder: Decoder): PlayerInventory {
-        return decoder.decodeSerializableValue(SerializablePlayerInventory.serializer()).toInventory(player)
+        return decoder.decodeSerializableValue(SerializablePlayerInventory.serializer()).toInventory()
     }
 
     override val descriptor: SerialDescriptor = SerializablePlayerInventory.serializer().descriptor
 
     override fun serialize(encoder: Encoder, value: PlayerInventory) {
-        val items = mutableListOf<SerializableItemStack>()
-        val armour = mutableListOf<SerializableArmourPiece>()
-
-        for (stack in value.main) {
-            if (stack.isEmpty && !KInventory.Config.serializeEmpty) continue
-            else items.add(SerializableItemStack(getKey(stack), stack.count, stack.tag?.toString()))
-        }
-
-        for (stack in value.armor) {
-            if ((stack.isEmpty && !KInventory.Config.serializeEmpty) || stack.item !is ArmorItem) continue
-            val armourItem = stack.item as ArmorItem
-            armour.add(SerializableArmourPiece(getKey(stack), stack.tag?.toString(), armourItem.slotType))
-        }
-
-        val offHandStack = value.offHand[0].serializable()
-
-        val inventory = SerializablePlayerInventory(items.toTypedArray(), armour.toTypedArray(), offHandStack, value.player.totalExperience)
-        encoder.encodeSerializableValue(SerializablePlayerInventory.serializer(), inventory)
+        encoder.encodeSerializableValue(SerializablePlayerInventory.serializer(), value.serializable())
     }
 
     private fun getKey(stack: ItemStack) = Registry.ITEM.getKey(stack.item).toString()
+
+    fun PlayerInventory.serializer(): KSerializer<PlayerInventory> = PlayerInventorySerializer
 }
