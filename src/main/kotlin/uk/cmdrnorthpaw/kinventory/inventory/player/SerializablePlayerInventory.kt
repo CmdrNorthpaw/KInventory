@@ -19,10 +19,10 @@ abstract  class SerializablePlayerInventory (
     val armour: Array<SerializableArmourPiece>,
     val offHand: SerializableItemStack,
     val xp: Int,
+    val playerId: String
 ) : SerializableInventory<PlayerInventory>(itemList.toList()) {
 
-    abstract val player: PlayerEntity
-    val uuid: String = player.uuidAsString
+    abstract val player: PlayerEntity?
 
     override fun toInventory(): PlayerInventory {
         val inventory = PlayerInventory(player)
@@ -63,7 +63,8 @@ abstract  class SerializablePlayerInventory (
                 armour.add(SerializableArmourPiece(getKey(it), it.tag.toString(), armourPiece.slotType))
             }
 
-            return SerializablePlayerInventory(items.toTypedArray(), armour.toTypedArray(), this.offHand[0].serializable(), this.player.totalExperience)
+            if (this.player.world.isClient) return SerializableClientPlayerInventory(items.toTypedArray(), armour.toTypedArray(), this.offHand[0].serializable(), this.player.totalExperience, this.player.uuidAsString)
+            else return SerializableServerPlayerInventory(items.toTypedArray(), armour.toTypedArray(), this.offHand[0].serializable(), this.player.totalExperience, this.player.uuidAsString)
         }
 
         fun PlayerEntity.restoreInventory(inventory: SerializablePlayerInventory) = inventory.restoreInventory(this)
