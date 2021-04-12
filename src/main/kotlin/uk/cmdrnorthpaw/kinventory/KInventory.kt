@@ -10,7 +10,7 @@ object KInventory : ModInitializer {
     }
 
 
-    fun Config(config: KInventoryConfig.() -> Unit) {
+    fun setConfig(config: KInventoryConfig.() -> Unit) {
         val newConfig = KInventoryConfig()
         config(newConfig)
         this.Config = newConfig
