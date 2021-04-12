@@ -6,6 +6,7 @@ import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.client.network.ClientPlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.ArmorItem
 import net.minecraft.item.ItemStack
@@ -18,6 +19,14 @@ import uk.cmdrnorthpaw.kinventory.model.SerializableItemStack
 import uk.cmdrnorthpaw.kinventory.model.SerializableItemStack.Companion.serializable
 import java.util.*
 
+/**
+ * Represents an inventory that belongs to a [PlayerEntity]
+ * Due to the way Minecraft's client-server model works, this is a sealed class, with implementations that should be used
+ * depending on whether your code is running on the logical client or the logical server.
+ * [SerializableServerPlayerInventory] should be used when running on the logical server (usually in single player or a dedicated server)
+ * [SerializableClientPlayerInventory] should be used on the logical client (mods that don't need to be installed on a server to work in multiplayer)
+ * The only difference between the two is how the [player] field is obtained
+ * */
 @Serializable
 sealed class SerializablePlayerInventory (
     private val itemList: List<SerializableItemStack>,
@@ -27,8 +36,17 @@ sealed class SerializablePlayerInventory (
     val playerId: String
 ) : SerializableInventory<PlayerInventory>(itemList.toList()) {
 
+    /**
+     * The [PlayerEntity] this inventory belongs to
+     * Implementation differs depending on whether you are using [SerializableClientPlayerInventory] or [SerializableServerPlayerInventory]
+     * */
     abstract val player: PlayerEntity?
 
+    /**
+     * This class's implementation of [SerializableInventory]'s [toInventory] function.
+     * Converts a [SerializablePlayerInventory] to a [PlayerInventory]
+     * @return A [PlayerInventory] built from this class.
+     * */
     override fun toInventory(): PlayerInventory {
         val inventory = PlayerInventory(player)
         items.map { it.toItemStack() }.forEachIndexed { index, itemStack ->
@@ -56,7 +74,12 @@ sealed class SerializablePlayerInventory (
     }
 
     companion object {
-        @JvmStatic
+        /**
+         * Converts a [PlayerInventory] to a [SerializablePlayerInventory]
+         * This function can distinguish if the player is on the client or the server
+         * and will return a [SerializableClientPlayerInventory] or [SerializableServerPlayerInventory] as appropriate
+         * @return A [SerializablePlayerInventory] from a [PlayerInventory]
+         * */
         fun PlayerInventory.serializable(): SerializablePlayerInventory {
             val items = mutableListOf<SerializableItemStack>()
             val armour = mutableListOf<SerializableArmourPiece>()
@@ -68,8 +91,8 @@ sealed class SerializablePlayerInventory (
                 armour.add(SerializableArmourPiece(getKey(it), it.tag.toString(), armourPiece.slotType))
             }
 
-            if (this.player.world.isClient) return SerializableClientPlayerInventory(items, armour, this.offHand[0].serializable(), this.player.totalExperience, this.player.uuidAsString)
-            else return SerializableServerPlayerInventory(items, armour, this.offHand[0].serializable(), this.player.totalExperience, this.player.uuidAsString)
+            return if (this.player.world.isClient) SerializableClientPlayerInventory(items, armour, this.offHand[0].serializable(), this.player.totalExperience, this.player.uuidAsString)
+            else SerializableServerPlayerInventory(items, armour, this.offHand[0].serializable(), this.player.totalExperience, this.player.uuidAsString)
         }
 
         fun PlayerEntity.restoreInventory(inventory: SerializablePlayerInventory) = inventory.restoreInventory(this)
@@ -77,6 +100,10 @@ sealed class SerializablePlayerInventory (
         private fun getKey(item: ItemStack) = Registry.ITEM.getId(item.item).toString()
     }
 
+    /**
+     * Represents a [SerializablePlayerInventory] running on the client
+     * @property player This class's implementation of [player]
+     * */
     @Serializable
     @Environment(EnvType.CLIENT)
     class SerializableClientPlayerInventory(
@@ -86,10 +113,18 @@ sealed class SerializablePlayerInventory (
         val playerXp: Int,
         val uuid: String
     ) : SerializablePlayerInventory(itemArray, armourList, offHandStack, playerXp, uuid) {
-        @Transient
-        override val player = MinecraftClient.getInstance().player
+        /**
+         * The [ClientPlayerEntity] who owns this inventory
+         * Will be null if the player is not currently logged into a world
+         * */
+        override val player
+            get() = MinecraftClient.getInstance().player
     }
 
+    /**
+     * An implementation of [SerializablePlayerInventory] to be used on a server
+     * @property player This class's implementation of [player]
+     * */
     @Environment(EnvType.SERVER)
     @Serializable
     class SerializableServerPlayerInventory(
@@ -100,6 +135,11 @@ sealed class SerializablePlayerInventory (
         val uuid: String
     ) : SerializablePlayerInventory(itemArray, armourList, offHandStack, playerXp, uuid) {
         override val player: ServerPlayerEntity?
+            /**
+             * The [ServerPlayerEntity] who owns this inventory
+             * Will be null if the player is not currently logged in or if you are calling this method during server startup
+             * Either way, you should not be using this field in either of those situations
+             * */
             get() = server?.playerManager?.getPlayer(UUID.fromString(this.uuid))
 
         companion object {
