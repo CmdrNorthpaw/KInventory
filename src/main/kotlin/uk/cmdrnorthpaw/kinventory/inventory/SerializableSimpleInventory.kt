@@ -13,10 +13,12 @@ class SerializableSimpleInventory(
 ) : SerializableInventory<SimpleInventory>(itemList) {
     override fun toInventory(): SimpleInventory = SimpleInventory(*items.map { it.toItemStack() }.toTypedArray())
 
-    companion object {
-        fun SimpleInventory.serializable(): SerializableSimpleInventory {
-            val stacks = (this as SimpleInventoryAccessor).stacks
+    companion object : SerializableInventoryCompanion<SimpleInventory, SerializableSimpleInventory> {
+        override fun getSerializable(from: SimpleInventory): SerializableSimpleInventory {
+            val stacks = (from as SimpleInventoryAccessor).stacks
             return SerializableSimpleInventory(stacks.toList().map { it.serializable() })
         }
+
+        fun SimpleInventory.serializable() = getSerializable(this)
     }
 }
