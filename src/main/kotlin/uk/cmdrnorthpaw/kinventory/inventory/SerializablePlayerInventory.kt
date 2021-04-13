@@ -26,6 +26,11 @@ import java.util.*
  * [SerializableServerPlayerInventory] should be used when running on the logical server (usually in single player or a dedicated server)
  * [SerializableClientPlayerInventory] should be used on the logical client (mods that don't need to be installed on a server to work in multiplayer)
  * The only difference between the two is how the [player] field is obtained
+ *
+ * @param itemList The items in this inventory. Includes the hotbar, but not the armour or off-hand.
+ * @param armour Any armour that this player is wearing.
+ * @param offHand The [ItemStack] in the player's off hand
+ * @param playerId The UUID of the inventory's owner as a [String]
  * */
 @Serializable
 sealed class SerializablePlayerInventory (
