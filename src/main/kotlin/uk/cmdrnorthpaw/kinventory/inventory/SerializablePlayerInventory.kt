@@ -63,29 +63,33 @@ sealed class SerializablePlayerInventory (
         return inventory
     }
 
-    companion object {
+    companion object : SerializableInventoryCompanion<PlayerInventory, SerializablePlayerInventory> {
         /**
          * Converts a [PlayerInventory] to a [SerializablePlayerInventory]
          * This function can distinguish if the player is on the client or the server
          * and will return a [SerializableClientPlayerInventory] or [SerializableServerPlayerInventory] as appropriate
          * @return A [SerializablePlayerInventory] from a [PlayerInventory]
          * */
-        fun PlayerInventory.serializable(): SerializablePlayerInventory {
+        fun PlayerInventory.serializable(): SerializablePlayerInventory = getSerializable(this)
+
+        private fun getKey(item: ItemStack) = Registry.ITEM.getId(item.item).toString()
+
+        override fun getSerializable(from: PlayerInventory): SerializablePlayerInventory {
             val items = mutableListOf<SerializableItemStack>()
             val armour = mutableListOf<SerializableArmourPiece>()
 
-            this.main.forEach { items.add(SerializableItemStack(getKey(it), it.count, it.tag.toString())) }
-            this.armor.forEach {
+            from.main.forEach { items.add(SerializableItemStack(getKey(it), it.count, it.tag.toString())) }
+            from.armor.forEach {
                 val armourPiece: ArmorItem
                 if (it.item !is ArmorItem) return@forEach else armourPiece = it.item as ArmorItem
                 armour.add(SerializableArmourPiece(getKey(it), it.tag.toString(), armourPiece.slotType))
             }
 
-            return if (this.player.world.isClient) SerializableClientPlayerInventory(items, armour, this.offHand[0].serializable(), this.player.uuidAsString)
-            else SerializableServerPlayerInventory(items, armour, this.offHand[0].serializable(), this.player.uuidAsString)
-        }
+            return if (from.player.world.isClient) SerializableClientPlayerInventory(items, armour, from.offHand[0].serializable(), from.player.uuidAsString)
+            else SerializableServerPlayerInventory(items, armour, from.offHand[0].serializable(), from.player.uuidAsString)
 
-        private fun getKey(item: ItemStack) = Registry.ITEM.getId(item.item).toString()
+
+        }
     }
 
     /**

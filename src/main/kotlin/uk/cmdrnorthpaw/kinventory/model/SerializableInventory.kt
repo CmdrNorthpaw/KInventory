@@ -23,7 +23,6 @@ abstract class SerializableInventory<T: Inventory>(val items: List<SerializableI
     abstract fun toInventory(): T
 
     interface SerializableInventoryCompanion<T: Inventory, S: SerializableInventory<T>> {
-        fun T.serializable()
         fun getSerializable(from: T): S
     }
 }
