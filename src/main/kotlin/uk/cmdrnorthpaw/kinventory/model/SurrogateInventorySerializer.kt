@@ -6,7 +6,7 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import net.minecraft.inventory.Inventory
 
-abstract class InventorySurrogateSerializer<I: Inventory, S: SerializableInventory<I>> (
+abstract class SurrogateInventorySerializer<I: Inventory, S: SerializableInventory<I>> (
     val surrogate: KSerializer<S>,
     private val surrogateCompanion: SerializableInventory.SerializableInventoryCompanion<I, S>
 ) : KSerializer<I> {
