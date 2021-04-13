@@ -32,7 +32,6 @@ sealed class SerializablePlayerInventory (
     private val itemList: List<SerializableItemStack>,
     val armour: List<SerializableArmourPiece>,
     val offHand: SerializableItemStack,
-    val xp: Int,
     val playerId: String
 ) : SerializableInventory<PlayerInventory>(itemList.toList()) {
 
@@ -59,20 +58,6 @@ sealed class SerializablePlayerInventory (
         return inventory
     }
 
-    fun restoreInventory(player: PlayerEntity) {
-        player.totalExperience = xp
-
-        player.inventory.main.clear()
-        items.map { it.toItemStack() }.forEachIndexed { index, stack ->
-            player.inventory.main.set(index, stack)
-        }
-
-        player.inventory.armor.clear()
-        armour.map { it.toItemStack() }.forEachIndexed { index, itemStack ->
-            player.inventory.armor.set(index, itemStack)
-        }
-    }
-
     companion object {
         /**
          * Converts a [PlayerInventory] to a [SerializablePlayerInventory]
@@ -91,11 +76,9 @@ sealed class SerializablePlayerInventory (
                 armour.add(SerializableArmourPiece(getKey(it), it.tag.toString(), armourPiece.slotType))
             }
 
-            return if (this.player.world.isClient) SerializableClientPlayerInventory(items, armour, this.offHand[0].serializable(), this.player.totalExperience, this.player.uuidAsString)
-            else SerializableServerPlayerInventory(items, armour, this.offHand[0].serializable(), this.player.totalExperience, this.player.uuidAsString)
+            return if (this.player.world.isClient) SerializableClientPlayerInventory(items, armour, this.offHand[0].serializable(), this.player.uuidAsString)
+            else SerializableServerPlayerInventory(items, armour, this.offHand[0].serializable(), this.player.uuidAsString)
         }
-
-        fun PlayerEntity.restoreInventory(inventory: SerializablePlayerInventory) = inventory.restoreInventory(this)
 
         private fun getKey(item: ItemStack) = Registry.ITEM.getId(item.item).toString()
     }
@@ -108,11 +91,10 @@ sealed class SerializablePlayerInventory (
     @Environment(EnvType.CLIENT)
     class SerializableClientPlayerInventory(
         private val itemArray: List<SerializableItemStack>,
-        val armourList: List<SerializableArmourPiece>,
-        val offHandStack: SerializableItemStack,
-        val playerXp: Int,
-        val uuid: String
-    ) : SerializablePlayerInventory(itemArray, armourList, offHandStack, playerXp, uuid) {
+        private val armourList: List<SerializableArmourPiece>,
+        private val offHandStack: SerializableItemStack,
+        private val uuid: String
+    ) : SerializablePlayerInventory(itemArray, armourList, offHandStack, uuid) {
         /**
          * The [ClientPlayerEntity] who owns this inventory
          * Will be null if the player is not currently logged into a world
@@ -129,11 +111,10 @@ sealed class SerializablePlayerInventory (
     @Serializable
     class SerializableServerPlayerInventory(
         private val itemArray: List<SerializableItemStack>,
-        val armourList: List<SerializableArmourPiece>,
-        val offHandStack: SerializableItemStack,
-        val playerXp: Int,
-        val uuid: String
-    ) : SerializablePlayerInventory(itemArray, armourList, offHandStack, playerXp, uuid) {
+        private val armourList: List<SerializableArmourPiece>,
+        private val offHandStack: SerializableItemStack,
+        private val uuid: String
+    ) : SerializablePlayerInventory(itemArray, armourList, offHandStack, uuid) {
         override val player: ServerPlayerEntity?
             /**
              * The [ServerPlayerEntity] who owns this inventory
