@@ -21,4 +21,9 @@ abstract class SerializableInventory<T: Inventory>(val items: List<SerializableI
      * so anything this inventory needs to be converted must be part of the class itself.
      * */
     abstract fun toInventory(): T
+
+    interface SerializableInventoryCompanion<T: Inventory> {
+        fun T.serializable()
+        fun getSerializable(from: T)
+    }
 }
