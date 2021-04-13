@@ -1,9 +1,10 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "uk.cmdrnorthpaw.kinventory.mixin",
+  "package": "uk.cmdrnorthpaw.kinventory.mixins",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "SimpleInventoryAccessor"
   ],
   "client": [
   ],
