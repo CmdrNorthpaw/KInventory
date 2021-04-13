@@ -72,12 +72,26 @@ publishing {
                 builtBy remapSourcesJar
             }
         }
+        gpr(MavenPublication) {
+            artifact(remapJar) {
+                builtBy remapJar
+            }
+            artifact(sourcesJar) {
+                builtBy remapSourcesJar
+            }
+        }
     }
 
     // select the repositories you want to publish to
     repositories {
-        // uncomment to publish to the local maven
-        // mavenLocal()
+        maven {
+            credentials {
+                username = "CmdrNorthpaw"
+                password = System.getenv("GPR_TOKEN")
+            }
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/CmdrNorthpaw/KInventory")
+        }
     }
 }
 repositories {
