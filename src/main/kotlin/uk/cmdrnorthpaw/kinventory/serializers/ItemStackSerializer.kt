@@ -8,6 +8,10 @@ import net.minecraft.item.ItemStack
 import uk.cmdrnorthpaw.kinventory.model.SerializableItemStack
 import uk.cmdrnorthpaw.kinventory.model.SerializableItemStack.Companion.serializable
 
+/**
+ * A [KSerializer] for [ItemStack]s.
+ * Uses surrogate serialization and is serializes into [SerializableItemStack].
+ * */
 object ItemStackSerializer : KSerializer<ItemStack> {
     override fun deserialize(decoder: Decoder): ItemStack {
         return decoder.decodeSerializableValue(SerializableItemStack.serializer()).toItemStack()
