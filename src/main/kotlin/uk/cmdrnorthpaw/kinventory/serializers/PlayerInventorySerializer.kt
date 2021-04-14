@@ -12,5 +12,5 @@ import uk.cmdrnorthpaw.kinventory.model.SurrogateInventorySerializer
 object PlayerInventorySerializer : SurrogateInventorySerializer<PlayerInventory, SerializablePlayerInventory>(
     SerializablePlayerInventory.serializer(), SerializablePlayerInventory.Companion
 ) {
-    fun PlayerInventory.serializer() = this@PlayerInventorySerializer
+    override fun PlayerInventory.serializer() = this@PlayerInventorySerializer
 }

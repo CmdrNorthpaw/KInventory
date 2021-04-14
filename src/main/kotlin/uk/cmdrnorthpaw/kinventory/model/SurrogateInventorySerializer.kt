@@ -18,7 +18,7 @@ import net.minecraft.inventory.Inventory
  *  but the user can just call S.serializable() to obtain it.
  *  @param surrogateCompanion A [SerializableInventory.SerializableInventoryCompanion] which can convert [I] to its [S] representation
  * */
-open class SurrogateInventorySerializer<I: Inventory, S: SerializableInventory<I>> (
+abstract class SurrogateInventorySerializer<I: Inventory, S: SerializableInventory<I>> (
     val surrogate: KSerializer<S>,
     private val surrogateCompanion: SerializableInventory.SerializableInventoryCompanion<I, S>
 ) : KSerializer<I> {
@@ -31,4 +31,6 @@ open class SurrogateInventorySerializer<I: Inventory, S: SerializableInventory<I
     override fun serialize(encoder: Encoder, value: I) {
         encoder.encodeSerializableValue(surrogate, surrogateCompanion.getSerializable(value))
     }
+
+    abstract fun I.serializer(): SurrogateInventorySerializer<I, S>
 }

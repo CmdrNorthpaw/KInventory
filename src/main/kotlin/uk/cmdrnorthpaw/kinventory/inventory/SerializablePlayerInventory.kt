@@ -98,7 +98,7 @@ sealed class SerializablePlayerInventory (
      * */
     @Serializable
     @Environment(EnvType.CLIENT)
-    class SerializableClientPlayerInventory(
+    class SerializableClientPlayerInventory (
         private val itemArray: List<SerializableItemStack>,
         private val armourList: List<SerializableArmourPiece>,
         private val offHandStack: SerializableItemStack,
