@@ -6,6 +6,4 @@ import uk.cmdrnorthpaw.kinventory.model.SurrogateInventorySerializer
 
 object SimpleInventorySerializer : SurrogateInventorySerializer<SimpleInventory, SerializableSimpleInventory>(
     SerializableSimpleInventory.serializer(), SerializableSimpleInventory.Companion
-) {
-    override fun SimpleInventory.serializer() = this@SimpleInventorySerializer
-}
+)
