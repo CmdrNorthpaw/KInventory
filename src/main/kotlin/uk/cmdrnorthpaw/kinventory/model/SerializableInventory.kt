@@ -8,8 +8,8 @@ import uk.cmdrnorthpaw.kinventory.model.SerializableItemStack.Companion.serializ
 
 /**
  * Represents any [Inventory] that needs to be serialized.
- * In its base form, currently supports inventories with [ItemStack]s in them
- * Fluid support will be added when a fluid storage API is merged with Fabric
+ * In its base form, currently supports inventories with [ItemStack]s in them.
+ * Fluid support will be added when a fluid storage API is merged with Fabric.
  * @param [T]: The [Inventory] that this class represents.
  * @property items: A [List] of [SerializableItemStack] that represents
  * */

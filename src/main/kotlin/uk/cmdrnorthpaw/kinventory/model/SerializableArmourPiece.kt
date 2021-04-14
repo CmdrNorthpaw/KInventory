@@ -6,7 +6,7 @@ import net.minecraft.entity.EquipmentSlot
 
 /**
  * Represents a [SerializableItemStack] which is an armour piece.
- * Contains additional information about the armor piece's [EquipmentSlot] (i.e. whether it's a helmet, chestplate, leggings or boots)
+ * Contains additional information about the armor piece's [EquipmentSlot].
  * */
 @Serializable
 class SerializableArmourPiece(

@@ -20,11 +20,11 @@ import uk.cmdrnorthpaw.kinventory.model.SerializableItemStack.Companion.serializ
 import java.util.*
 
 /**
- * Represents an inventory that belongs to a [PlayerEntity]
+ * Represents an inventory that belongs to a [PlayerEntity].
  * Due to the way Minecraft's client-server model works, this is a sealed class, with implementations that should be used
  * depending on whether your code is running on the logical client or the logical server.
- * [SerializableServerPlayerInventory] should be used when running on the logical server (usually in single player or a dedicated server)
- * [SerializableClientPlayerInventory] should be used on the logical client (mods that don't need to be installed on a server to work in multiplayer)
+ * [SerializableServerPlayerInventory] should be used when running on the logical server (usually in single player or a dedicated server).
+ * [SerializableClientPlayerInventory] should be used on the logical client (mods that don't need to be installed on a server to work in multiplayer).
  * The only difference between the two is how the [player] field is obtained
  *
  * @param itemList The items in this inventory. Includes the hotbar, but not the armour or off-hand.
@@ -41,14 +41,14 @@ sealed class SerializablePlayerInventory (
 ) : SerializableInventory<PlayerInventory>(itemList.toList()) {
 
     /**
-     * The [PlayerEntity] this inventory belongs to
-     * Implementation differs depending on whether you are using [SerializableClientPlayerInventory] or [SerializableServerPlayerInventory]
+     * The [PlayerEntity] this inventory belongs to.
+     * Implementation differs depending on whether you are using [SerializableClientPlayerInventory] or [SerializableServerPlayerInventory].
      * */
     abstract val player: PlayerEntity?
 
     /**
      * This class's implementation of [SerializableInventory]'s [toInventory] function.
-     * Converts a [SerializablePlayerInventory] to a [PlayerInventory]
+     * Converts a [SerializablePlayerInventory] to a [PlayerInventory].
      * @return A [PlayerInventory] built from this class.
      * */
     override fun toInventory(): PlayerInventory {
@@ -65,9 +65,9 @@ sealed class SerializablePlayerInventory (
 
     companion object : SerializableInventoryCompanion<PlayerInventory, SerializablePlayerInventory> {
         /**
-         * Converts a [PlayerInventory] to a [SerializablePlayerInventory]
+         * Converts a [PlayerInventory] to a [SerializablePlayerInventory].
          * This function can distinguish if the player is on the client or the server
-         * and will return a [SerializableClientPlayerInventory] or [SerializableServerPlayerInventory] as appropriate
+         * and will return a [SerializableClientPlayerInventory] or [SerializableServerPlayerInventory] as appropriate.
          * @return A [SerializablePlayerInventory] from a [PlayerInventory]
          * */
         fun PlayerInventory.serializable(): SerializablePlayerInventory = getSerializable(this)
@@ -93,7 +93,7 @@ sealed class SerializablePlayerInventory (
     }
 
     /**
-     * Represents a [SerializablePlayerInventory] running on the client
+     * Represents a [SerializablePlayerInventory] running on the client.
      * @property player This class's implementation of [player]
      * */
     @Serializable
@@ -113,7 +113,7 @@ sealed class SerializablePlayerInventory (
     }
 
     /**
-     * An implementation of [SerializablePlayerInventory] to be used on a server
+     * An implementation of [SerializablePlayerInventory] to be used on a server.
      * @property player This class's implementation of [player]
      * */
     @Environment(EnvType.SERVER)

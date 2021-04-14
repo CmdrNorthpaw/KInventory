@@ -9,7 +9,7 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 
 /**
- * Represents an [ItemStack] which is [Serializable]
+ * Represents an [ItemStack] which is [Serializable].
  * @param item: The registry key of the item being serialized
  * @param count: How many items were in the stack
  * @param nbt: A string representation of the [ItemStack]'s NBT tag
@@ -22,7 +22,7 @@ open class SerializableItemStack(
 ) {
 
     /**
-     * Converts a [SerializableItemStack] to a regular ol' [ItemStack]
+     * Converts a [SerializableItemStack] to a regular ol' [ItemStack].
      * Preserves item type, NBT and stack count.
      * @return The [ItemStack] representation of this [SerializableItemStack] object.
      * */
@@ -34,8 +34,8 @@ open class SerializableItemStack(
 
     companion object {
         /**
-         * Converts an [ItemStack] to it's [SerializableItemStack] representation
-         * Can determine between an [ArmorItem] and a regular [Item] but otherwise defaults to [SerializableItemStack]
+         * Converts an [ItemStack] to it's [SerializableItemStack] representation.
+         * Can determine between an [ArmorItem] and a regular [Item] but otherwise defaults to [SerializableItemStack].
          * Not recommended if you're using a custom serializable item stack type.
          * @return The [ItemStack] in serializable form.
          * */
