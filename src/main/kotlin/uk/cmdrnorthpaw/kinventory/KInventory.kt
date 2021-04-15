@@ -8,13 +8,4 @@ object KInventory : ModInitializer {
     override fun onInitialize() {
         ServerLifecycleEvents.SERVER_STARTED.register(SerializableServerPlayerInventory.Companion::onStart)
     }
-
-
-    fun setConfig(config: KInventoryConfig.() -> Unit) {
-        val newConfig = KInventoryConfig()
-        config(newConfig)
-        this.Config = newConfig
-    }
-    var Config: KInventoryConfig = KInventoryConfig()
-        private set
 }
