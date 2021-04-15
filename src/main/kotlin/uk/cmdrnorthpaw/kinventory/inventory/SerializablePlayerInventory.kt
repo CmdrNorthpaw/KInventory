@@ -17,6 +17,8 @@ import uk.cmdrnorthpaw.kinventory.model.SerializableArmourPiece
 import uk.cmdrnorthpaw.kinventory.model.SerializableInventory
 import uk.cmdrnorthpaw.kinventory.model.SerializableItemStack
 import uk.cmdrnorthpaw.kinventory.model.SerializableItemStack.Companion.serializable
+import uk.cmdrnorthpaw.kinventory.serializers.NotSerializable
+import uk.cmdrnorthpaw.kinventory.serializers.PlayerInventorySerializer
 import java.util.*
 
 /**
@@ -38,7 +40,7 @@ sealed class SerializablePlayerInventory (
     val armour: List<SerializableArmourPiece>,
     val offHand: SerializableItemStack,
     val playerId: String
-) : SerializableInventory<PlayerInventory>(itemList.toList()) {
+) : SerializableInventory<@kotlinx.serialization.Serializable(PlayerInventorySerializer::class) PlayerInventory>(itemList.toList()) {
 
     /**
      * The [PlayerEntity] this inventory belongs to.

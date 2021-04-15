@@ -5,6 +5,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
 import uk.cmdrnorthpaw.kinventory.model.SerializableItemStack.Companion.serializable
+import uk.cmdrnorthpaw.kinventory.serializers.NotSerializable
 
 /**
  * Represents any [Inventory] that needs to be serialized.
@@ -14,7 +15,7 @@ import uk.cmdrnorthpaw.kinventory.model.SerializableItemStack.Companion.serializ
  * @property items: A [List] of [SerializableItemStack] that represents
  * */
 @Serializable
-abstract class SerializableInventory<T: Inventory>(val items: List<SerializableItemStack>) {
+abstract class SerializableInventory<T: @kotlinx.serialization.Serializable(NotSerializable::class) Inventory>(val items: List<SerializableItemStack>) {
     /**
      * Converts this [SerializableInventory] to an actual [Inventory] of type [T]
      * For polymorphism reasons this has to be called without any parameters,
