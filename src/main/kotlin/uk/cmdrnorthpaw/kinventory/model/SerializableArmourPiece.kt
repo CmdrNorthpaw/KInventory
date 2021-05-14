@@ -10,7 +10,7 @@ import net.minecraft.entity.EquipmentSlot
  * */
 @Serializable
 class SerializableArmourPiece(
-    private val armourItem: String,
-    private val armourTags: String?,
+    internal val armourItem: String,
+    internal val armourTags: String?,
     val slot: EquipmentSlot
 ) : SerializableItemStack(armourItem, 1, armourTags)

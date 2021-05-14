@@ -36,7 +36,7 @@ import java.util.*
  * */
 @Serializable
 sealed class SerializablePlayerInventory (
-    private val itemList: List<SerializableItemStack>,
+    internal val itemList: List<SerializableItemStack>,
     val armour: List<SerializableArmourPiece>,
     val offHand: SerializableItemStack,
     val playerId: String
@@ -101,10 +101,10 @@ sealed class SerializablePlayerInventory (
     @Serializable
     @Environment(EnvType.CLIENT)
     class SerializableClientPlayerInventory (
-        private val itemArray: List<SerializableItemStack>,
-        private val armourList: List<SerializableArmourPiece>,
-        private val offHandStack: SerializableItemStack,
-        private val uuid: String
+        internal val itemArray: List<SerializableItemStack>,
+        internal val armourList: List<SerializableArmourPiece>,
+        internal val offHandStack: SerializableItemStack,
+        internal val uuid: String
     ) : SerializablePlayerInventory(itemArray, armourList, offHandStack, uuid) {
         /**
          * The [ClientPlayerEntity] who owns this inventory
@@ -121,10 +121,10 @@ sealed class SerializablePlayerInventory (
     @Environment(EnvType.SERVER)
     @Serializable
     class SerializableServerPlayerInventory(
-        private val itemArray: List<SerializableItemStack>,
-        private val armourList: List<SerializableArmourPiece>,
-        private val offHandStack: SerializableItemStack,
-        private val uuid: String
+        internal val itemArray: List<SerializableItemStack>,
+        internal val armourList: List<SerializableArmourPiece>,
+        internal val offHandStack: SerializableItemStack,
+        internal val uuid: String
     ) : SerializablePlayerInventory(itemArray, armourList, offHandStack, uuid) {
         override val player: ServerPlayerEntity?
             /**
@@ -135,7 +135,7 @@ sealed class SerializablePlayerInventory (
             get() = server?.playerManager?.getPlayer(UUID.fromString(this.uuid))
 
         companion object {
-            private var server: MinecraftServer? = null
+            internal var server: MinecraftServer? = null
             internal fun onStart(server: MinecraftServer) { Companion.server = server }
         }
     }
