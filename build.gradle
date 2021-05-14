@@ -1,8 +1,8 @@
 plugins {
     id 'fabric-loom' version '0.7-SNAPSHOT'
     id 'maven-publish'
-    id 'org.jetbrains.kotlin.jvm' version '1.4.32'
-    id 'org.jetbrains.kotlin.plugin.serialization' version '1.4.32'
+    id 'org.jetbrains.kotlin.jvm' version '1.5.0'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.5.0'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -20,7 +20,7 @@ dependencies {
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation(include("net.fabricmc.fabric-api:fabric-events-lifecycle-v0:0.2.1+ca58154a7d"))
-    modImplementation("net.fabricmc:fabric-language-kotlin:1.5.0+kotlin.1.4.31")
+    modImplementation("net.fabricmc:fabric-language-kotlin:1.6.0+kotlin.1.5.0")
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 
