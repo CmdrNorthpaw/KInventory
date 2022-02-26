@@ -1,12 +1,11 @@
 plugins {
-    id 'fabric-loom' version '0.7-SNAPSHOT'
-    id 'maven-publish'
-    id 'org.jetbrains.kotlin.jvm' version '1.5.0'
-    id 'org.jetbrains.kotlin.plugin.serialization' version '1.5.0'
+    id 'fabric-loom' version '0.11-SNAPSHOT'
+    id 'org.jetbrains.kotlin.jvm' version '1.6.10'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.6.10'
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version
@@ -23,6 +22,8 @@ dependencies {
     modImplementation("net.fabricmc:fabric-language-kotlin:1.6.0+kotlin.1.5.0")
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2"
 
     // PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
     // You may need to force-disable transitiveness on them.
@@ -60,40 +61,6 @@ jar {
     from "LICENSE"
 }
 
-// configure the maven publication
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            // add all the jars that should be included when publishing to maven
-            artifact(remapJar) {
-                builtBy remapJar
-            }
-            artifact(sourcesJar) {
-                builtBy remapSourcesJar
-            }
-        }
-        gpr(MavenPublication) {
-            artifact(remapJar) {
-                builtBy remapJar
-            }
-            artifact(sourcesJar) {
-                builtBy remapSourcesJar
-            }
-        }
-    }
-
-    // select the repositories you want to publish to
-    repositories {
-        maven {
-            credentials {
-                username = "CmdrNorthpaw"
-                password = System.getenv("GPR_TOKEN")
-            }
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/CmdrNorthpaw/KInventory")
-        }
-    }
-}
 repositories {
     mavenCentral()
 }
