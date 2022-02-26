@@ -40,7 +40,7 @@ sealed class SerializablePlayerInventory (
     val armour: List<SerializableArmourPiece>,
     val offHand: SerializableItemStack,
     val playerId: String
-) : SerializableInventory<@kotlinx.serialization.Serializable(PlayerInventorySerializer::class) PlayerInventory>(itemList.toList()) {
+) : SerializableInventory<@Serializable(PlayerInventorySerializer::class) PlayerInventory>(itemList.toList()) {
 
     /**
      * The [PlayerEntity] this inventory belongs to.

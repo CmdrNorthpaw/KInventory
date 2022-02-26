@@ -16,6 +16,6 @@ import uk.cmdrnorthpaw.kinventory.serializers.NotSerializable
 class SerializableDoubleInventory (
     val first: SerializableInventory<*>,
     val second: SerializableInventory<*>
-) : SerializableInventory<@kotlinx.serialization.Serializable(NotSerializable::class) DoubleInventory>(first.items + second.items) {
+) : SerializableInventory<@Serializable(NotSerializable::class) DoubleInventory>(first.items + second.items) {
     override fun toInventory(): DoubleInventory = DoubleInventory(first.toInventory(), second.toInventory())
 }
