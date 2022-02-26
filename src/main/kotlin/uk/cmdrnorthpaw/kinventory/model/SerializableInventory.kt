@@ -15,7 +15,7 @@ import uk.cmdrnorthpaw.kinventory.serializers.NotSerializable
  * @property items: A [List] of [SerializableItemStack] that represents
  * */
 @Serializable
-abstract class SerializableInventory<T: @kotlinx.serialization.Serializable(NotSerializable::class) Inventory>(open val items: List<SerializableItemStack>) {
+abstract class SerializableInventory<T: @Serializable(NotSerializable::class) Inventory>(open val items: List<SerializableItemStack>) {
     /**
      * Converts this [SerializableInventory] to an actual [Inventory] of type [T]
      * For polymorphism reasons this has to be called without any parameters,
