@@ -9,9 +9,9 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
 /**
- * A dummy serializer for any type arguments that the compiler wants to be [Serializable] but will never actually be serialized
+ * A dummy serializer for any type arguments that the compiler wants to be [Serializable] but will never actually be serialized.
  * To the compiler it looks like a regular [KSerializer],
- * but if anyone actually tries to use it it throws an error.
+ * but if anyone actually tries to use it, it throws an error.
  *
  * @throws SerializationException
  * */
